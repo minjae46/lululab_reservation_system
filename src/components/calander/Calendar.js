@@ -1,12 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 import { ko } from 'date-fns/esm/locale';
 import { getMonth, getDate, getDay } from 'date-fns';
+import setHours from 'date-fns/setHours';
+import setMinutes from 'date-fns/setMinutes';
 import 'react-datepicker/dist/react-datepicker.css';
 import './Calendar.scss';
 
 const Calendar = () => {
   const [startDate, setStartDate] = useState(new Date());
+  //const [data, setData] = useState([]);
 
   let handleColor = time => {
     return time.getHours() > 12 ? 'text-success' : 'text-error';
@@ -28,6 +31,17 @@ const Calendar = () => {
     props.setClubTime(String(Month + '.' + Date + ' (' + Day + ')'));
   };
 
+  // useEffect(() => {
+  //   fetch('/data/reservation.json', {
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //       Accept: 'application/json',
+  //     },
+  //   })
+  //     .then(response => response.json())
+  //     .then(result => setData(result.data));
+  // }, []);
+
   return (
     <DatePicker
       showTimeSelect
@@ -40,7 +54,9 @@ const Calendar = () => {
       minDate={new Date()} // 오늘 날짜 전은 선택 못하게
       selectTime={selectTime}
       filterTime={filterPassedTime}
-      timeIntervals={30}
+      timeIntervals={60} // 인터벌 1시간을 설정
+      minTime={setHours(setMinutes(new Date(), 0), 9)} // 병원 시작 시간
+      maxTime={setHours(setMinutes(new Date(), 0), 18)} // 병원 마감 시간
     />
   );
 };

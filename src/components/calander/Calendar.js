@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 import { ko } from 'date-fns/esm/locale';
 import { getMonth, getDate, getDay } from 'date-fns';
@@ -7,10 +6,7 @@ import setMinutes from 'date-fns/setMinutes';
 import 'react-datepicker/dist/react-datepicker.css';
 import './Calendar.scss';
 
-const Calendar = () => {
-  const [startDate, setStartDate] = useState(new Date());
-  //const [data, setData] = useState([]);
-
+const Calendar = ({ startDate, setStartDate }) => {
   let handleColor = time => {
     return time.getHours() > 12 ? 'text-success' : 'text-error';
   };
@@ -30,17 +26,6 @@ const Calendar = () => {
     // 오브젝트는 전달 안돼서 string으로 변환
     props.setClubTime(String(Month + '.' + Date + ' (' + Day + ')'));
   };
-
-  // useEffect(() => {
-  //   fetch('/data/reservation.json', {
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //       Accept: 'application/json',
-  //     },
-  //   })
-  //     .then(response => response.json())
-  //     .then(result => setData(result.data));
-  // }, []);
 
   return (
     <DatePicker

@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import './Registeration.scss';
 
 const Reservation = () => {
@@ -8,12 +9,21 @@ const Reservation = () => {
     navigate('/list');
   };
 
+  const location = useLocation();
+  const selectedDay = location.state.selectedDay;
+  const selectedTime = location.state.selectedTime;
+
+  console.log('선택날짜', selectedDay);
+  console.log('선택시간', selectedTime);
+
   return (
     <div className="flex items-center justify-center flex-col m-auto my-20">
       <h1 className="title mb-10">진료 예약하기</h1>
       <h3 className="sub pb-5">개인정보를 입력해주세요.</h3>
+      <span>예약 날짜 : {selectedDay}</span>
+      <span>예약 시간 : {selectedTime}</span>
       <form className="w-96">
-        <div class="my-12">
+        <div className="my-12">
           <div className="py-5">
             <p className="pb-3">이름</p>
             <input />
@@ -42,10 +52,6 @@ const Reservation = () => {
           <div className="py-5">
             <p className="pb-3">전화번호</p>
             <div className="flex justify-between">
-              <input />
-              <span> - </span>
-              <input />
-              <span> - </span>
               <input />
             </div>
           </div>

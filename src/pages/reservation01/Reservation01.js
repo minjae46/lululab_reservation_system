@@ -1,16 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import DatePicker from 'react-datepicker';
-import { ko } from 'date-fns/esm/locale';
 import { getMonth, getDate, getYear } from 'date-fns';
+import Calendar from '../reservation01/components/Calendar01';
 import 'react-datepicker/dist/react-datepicker.css';
-import './ReservationMy.scss';
+import './Reservation01.scss';
 
 const Reservation = () => {
   const [startDate, setStartDate] = useState(new Date());
   const [data, setData] = useState([]);
-
-  console.log('데이타', data);
+  const [timeSelected, setTimeSelected] = useState('');
 
   const dateSelected = String(
     getYear(startDate) +
@@ -20,8 +18,16 @@ const Reservation = () => {
       getDate(startDate)
   );
 
+  const timeSelect = el => {
+    setTimeSelected(el);
+  };
+
   const navigate = useNavigate();
-  const register = () => navigate('/register');
+  const register = () => {
+    navigate('/register', {
+      state: { selectedDay: dateSelected, selectedTime: timeSelected },
+    });
+  };
 
   useEffect(() => {
     fetch('/data/reservation.json', {
@@ -30,7 +36,7 @@ const Reservation = () => {
         Accept: 'application/json',
       },
     })
-      .then(response => response.json())
+      .then(res => res.json())
       .then(result => setData(result.data));
   }, []);
 
@@ -39,14 +45,7 @@ const Reservation = () => {
       <h1 className="title mb-10">병원 예약하기</h1>
       <h3 className="sub pb-5">예약 가능한 날짜와 시간을 선택해주세요.</h3>
       <form>
-        <DatePicker
-          selected={startDate}
-          onChange={date => setStartDate(date)}
-          locale={ko} // 한글로 변경
-          dateFormat="yyyy. MM. dd" // 시간 포맷 변경
-          showPopperArrow={false} // 화살표 변경
-          minDate={new Date()} // 오늘 날짜 전은 선택 못하게
-        />
+        <Calendar startDate={startDate} setStartDate={setStartDate} />
         <div className="infoBox">
           <span>달력에서 날짜를 선택해 주세요.</span>
         </div>
@@ -57,7 +56,13 @@ const Reservation = () => {
                 <div className="box" key={idx}>
                   {el.time.map((el, idx) => {
                     return (
-                      <div className="time" key={idx}>
+                      <div
+                        className="time"
+                        key={idx}
+                        onClick={() => {
+                          timeSelect(el);
+                        }}
+                      >
                         {el}
                       </div>
                     );

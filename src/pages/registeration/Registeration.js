@@ -13,9 +13,6 @@ const Reservation = () => {
   const selectedDay = location.state.selectedDay;
   const selectedTime = location.state.selectedTime;
 
-  console.log('선택날짜', selectedDay);
-  console.log('선택시간', selectedTime);
-
   return (
     <div className="flex items-center justify-center flex-col m-auto my-20">
       <h1 className="title mb-10">진료 예약하기</h1>
